@@ -18,7 +18,7 @@ export class PostService implements OnModuleInit {
     private readonly createPostUseCase: CreatePostUseCase,
     private readonly getPostsUseCase: GetPostsUseCase,
     private readonly postRepository: PostRepository
-  ) {}
+  ) { }
 
   async onModuleInit() {
     const foundTags = await this.tagService.getAllTags()
@@ -58,7 +58,7 @@ export class PostService implements OnModuleInit {
     return this.getPostsUseCase.execute(input)
   }
 
-  @Cron('*/1 * * * *')
+  @Cron('*/30 * * * *')
   async handleArchivePosts() {
     await this.postRepository.deleteOldPosts()
   }

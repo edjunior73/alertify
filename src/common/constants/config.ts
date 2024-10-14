@@ -18,4 +18,4 @@ export const IS_PROD = NODE_ENV === 'production'
 
 export const AUTH_HEADER = 'authorization'
 
-export const MAX_POSTS_COUNT = 10
+export const MAX_POSTS_COUNT = 100000
