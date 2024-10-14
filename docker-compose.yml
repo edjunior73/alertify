@@ -1,0 +1,64 @@
+services:
+  mongodb:
+    image: mongo:7.0.7
+    restart: always
+    ports:
+      - '27127:27017'
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=PASS_123
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    ports:
+      - '9200:9200'
+    restart: always
+    networks:
+      - 'app-network'
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.15.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - '5601:5601'
+    depends_on:
+      - elasticsearch
+    restart: always
+    networks:
+      - 'app-network'
+
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:7.15.0
+    environment:
+      - output.elasticsearch.hosts=["http://elasticsearch:9200"]
+      - apm-server.secret_token=TOKEN_123
+    ports:
+      - '8200:8200'
+    depends_on:
+      - elasticsearch
+    restart: always
+    networks:
+      - 'app-network'
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    ports:
+      - '8123:8123'
+      - '9000:9000'
+      - '9009:9009'
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: ''
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: '1'
+
+networks:
+  app-network:
+    driver: bridge
