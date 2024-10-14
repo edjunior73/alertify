@@ -2,7 +2,7 @@ import { pathsToModuleNameMapper, JestConfigWithTsJest } from 'ts-jest'
 import { compilerOptions } from './tsconfig.json'
 
 const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {
-  prefix: '<rootDir>/src'
+  prefix: '<rootDir>'
 })
 
 export default {

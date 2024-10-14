@@ -112,7 +112,7 @@ describe('GeneralApiResponse', () => {
     expect(Test).toBeDefined()
     expect((swaggerSpy.mock.calls[0][0] as ApiResponseMetadata).type).toHaveProperty(
       'name',
-      'ExampleData'
+      'ExampleResponse'
     )
     expect(forbiddenSpy).not.toHaveBeenCalled()
   })
@@ -162,7 +162,7 @@ describe('GeneralApiResponse', () => {
     expect(Test).toBeDefined()
     expect((swaggerSpy.mock.calls[0][0] as ApiResponseMetadata).type).toHaveProperty(
       'name',
-      'ExampleData'
+      'ExampleResponse'
     )
     expect(apiOperationSpy).not.toHaveBeenCalled()
   })

@@ -3,7 +3,7 @@ import { AnomalyDetectionStrategy } from '../interfaces'
 
 @Injectable()
 export class AnomalyDetectionContext {
-  private strategy: AnomalyDetectionStrategy
+  strategy: AnomalyDetectionStrategy
 
   setStrategy(strategy: AnomalyDetectionStrategy) {
     this.strategy = strategy

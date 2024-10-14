@@ -36,9 +36,9 @@ export class CheckAnomaliesUseCase extends UseCase<
 
   setStrategy(strategyName = AnomalyRange.THRESHOLD) {
     const strategyMap: Record<string, AnomalyDetectionStrategy> = {
-      'dynamic-range': new DynamicRangeStrategy(20),
+      dynamic_range: new DynamicRangeStrategy(20),
       threshold: new ThresholdStrategy(),
-      'percentage-increase': new PercentageIncreaseStrategy(50),
+      percentage_increase: new PercentageIncreaseStrategy(50),
       spike: new SpikeStrategy(1000)
     }
 
@@ -77,23 +77,25 @@ export class CheckAnomaliesUseCase extends UseCase<
       })
     })
 
-    await this.anomalyRepository.createMany(anomalies)
+    if (anomalies.length > 0) {
+      await this.anomalyRepository.createMany(anomalies)
 
-    const userIds = Object.keys(tagsByUserId)
-    const foundTagUsers = await this.userRepository.getByIds(userIds)
-    await Promise.all(
-      foundTagUsers.map(async user => {
-        const userTags = tagsByUserId[user.id]
+      const userIds = Object.keys(tagsByUserId)
+      const foundTagUsers = await this.userRepository.getByIds(userIds)
+      await Promise.all(
+        foundTagUsers.map(async user => {
+          const userTags = tagsByUserId[user.id]
 
-        Logger.log(
-          `An anomaly has been detected for tag: ${userTags.join(',')} for user ${user.email}`
-        )
-        await this.emailAdapter.sendEmail({
-          to: user.email,
-          subject: `Alertify - An anomaly has been detected for your hashtags`,
-          body: `An anomaly has been detected for the following hashtags: ${userTags.join(', ')}`
+          Logger.log(
+            `An anomaly has been detected for tag: ${userTags?.join(',')} for user ${user.email}`
+          )
+          await this.emailAdapter.sendEmail({
+            to: user.email,
+            subject: `Alertify - An anomaly has been detected for your hashtags`,
+            body: `An anomaly has been detected for the following hashtags: ${userTags?.join(', ')}`
+          })
         })
-      })
-    )
+      )
+    }
   }
 }

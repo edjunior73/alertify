@@ -1,1 +1,1 @@
-export * from './get-posts.dto'
+export * from './get-anomalies.dto'
