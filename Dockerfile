@@ -12,7 +12,7 @@ RUN yarn build
 RUN npm prune --production --force
 
 
-FROM node:16.14.0-alpine AS runtime
+FROM node:18.18.0-alpine AS runtime
 ENV TZ Etc/UTC
 WORKDIR /home/node/app
 USER node
